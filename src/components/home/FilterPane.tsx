@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
-import BasicButton from "./ui/BasicButton";
-import { FilterVariants, GetTaskType, TaskFilterTypes } from "@/types";
-import useGetAllTasks from "@/hooks/useGetAllTasks";
+import { FilterVariants, TaskFilterTypes } from "@/types";
+import BasicButton from "../ui/BasicButton";
 
-export default function FilterPane() {
-  const { setTaskStatus }: GetTaskType = useGetAllTasks();
+export default function FilterPane({
+  getFiltertasks,
+}: {
+  getFiltertasks: (statusFilter: TaskFilterTypes) => void;
+}) {
   const [variants, setVariants] = useState<FilterVariants>({
     All: "primary",
     To_Do: "basic",
@@ -29,8 +31,8 @@ export default function FilterPane() {
       filter === "To_Do"
         ? "To Do"
         : filter === "In_Progress"
-        ? "In Progress"
-        : filter;
+          ? "In Progress"
+          : filter;
     return data as TaskFilterTypes;
   };
 
@@ -43,7 +45,7 @@ export default function FilterPane() {
           text={getNewFilter(filter)}
           onClick={() => {
             handleFilterClick(filter as keyof FilterVariants);
-            setTaskStatus(getNewFilter(filter));
+            getFiltertasks(getNewFilter(filter));
           }}
         />
       ))}

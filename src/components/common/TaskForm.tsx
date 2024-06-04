@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
-import InputTitle from "./ui/InputTitle";
 import { NewTaskType, PatchTaskType, PostTaskType } from "@/types";
 import usePostTask from "@/hooks/usePostTask";
 import { TaskStatusList } from "@/utils";
@@ -9,7 +8,8 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/utils/cn";
 import usePatchTask from "@/hooks/usePatchTask";
 import useGetTask from "@/hooks/useGetTask";
-import BasicText from "./ui/BasicText";
+import BasicText from "../ui/BasicText";
+import InputTitle from "../ui/InputTitle";
 
 export default function TaskForm({ taskId }: { taskId?: string }) {
   const { postResponse, postError, postStatus, postTask }: PostTaskType =
@@ -40,7 +40,7 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
     if (postStatus === "success" || patchStatus === "success") router.push("/");
     if (postStatus === "error" || patchStatus === "error")
       setErrorMessage(
-        `Something went wrong! ${JSON.stringify(postResponse || patchResponse)}`
+        `Something went wrong! ${JSON.stringify(postResponse || patchResponse)}`,
       );
   }, [postStatus, patchStatus]);
 
@@ -106,32 +106,32 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
           </div>
           <div className="flex flex-col mx-6 px-6 w-full gap-1">
             <InputTitle title="Status" />
-            <select
-              className="bg-background border-border border-2 rounded-xl px-3 py-2 text-foreground"
-              onChange={(e) => {
-                if (
-                  e.target.value === "To Do" ||
-                  e.target.value === "In Progress" ||
-                  e.target.value === "Done"
-                )
-                  setCurrentTask({
-                    ...currentTask,
-                    taskStatus: e.target.value,
-                  });
-              }}
-              required={true}
-              value={currentTask.taskStatus}
-            >
+            <div className="flex justify-start gap-5 items-center ml-1 mb-1">
               {TaskStatusList.map((status) => (
-                <option
-                  className="bg-background px-3 py-2 text-foreground"
-                  key={status}
-                  value={status}
-                >
-                  {status}
-                </option>
+                <div key={status}>
+                  <input
+                    type="radio"
+                    id={status}
+                    value={status}
+                    checked={currentTask.taskStatus === status}
+                    name="Status"
+                    onChange={(e) => {
+                      if (
+                        e.target.value === "To Do" ||
+                        e.target.value === "In Progress" ||
+                        e.target.value === "Done"
+                      )
+                        setCurrentTask({
+                          ...currentTask,
+                          taskStatus: e.target.value,
+                        });
+                    }}
+                    required={true}
+                  />
+                  <InputTitle title={status} />
+                </div>
               ))}
-            </select>
+            </div>
           </div>
 
           {errorMessage !== "" ||
@@ -158,14 +158,14 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
                 "text-primary-foreground bg-primary hover:opacity-60 border-border border-2 text-base font-semibold rounded-xl px-4 py-2",
                 postStatus === "loading" || patchStatus === "loading"
                   ? "opacity-60"
-                  : ""
+                  : "",
               )}
             >
               {postStatus === "loading" || patchStatus === "loading"
                 ? "Loading ..."
                 : taskId
-                ? "Update Task"
-                : "Create Task"}
+                  ? "Update Task"
+                  : "Create Task"}
             </button>
           </div>
         </>

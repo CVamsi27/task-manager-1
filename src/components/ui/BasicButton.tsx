@@ -19,18 +19,15 @@ export default function BasicButton({
   );
 }
 
-const basicTextVariants = cva(
-  "px-3 py-1 rounded text-xl hover:opacity-60",
-  {
-    variants: {
-      variant: {
-        basic: "bg-muted text-muted-foreground",
-        primary: "bg-primary text-primary-foreground",
-        error: "bg-destructive text-primary-foreground",
-      },
+const basicTextVariants = cva("px-3 py-1 rounded text-xl hover:opacity-60", {
+  variants: {
+    variant: {
+      basic: "bg-muted text-muted-foreground",
+      primary: "bg-primary text-primary-foreground",
+      error: "bg-destructive text-primary-foreground",
     },
-    defaultVariants: {
-      variant: "basic",
-    },
-  }
-);
+  },
+  defaultVariants: {
+    variant: "basic",
+  },
+});

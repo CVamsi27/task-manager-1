@@ -1,5 +1,5 @@
-import { MaxWidthWrapper } from "@/components/MaxWidthWrapper";
-import TaskForm from "@/components/TaskForm";
+import { MaxWidthWrapper } from "@/components/common/MaxWidthWrapper";
+import TaskForm from "@/components/common/TaskForm";
 
 export default function EditPage({
   searchParams,
