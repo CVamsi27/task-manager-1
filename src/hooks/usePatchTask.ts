@@ -1,9 +1,9 @@
+import { MessageSchema } from "@/schema";
 import { NewTaskType, Status } from "@/types";
 import { useState } from "react";
 
 const usePatchTask = () => {
   const [patchResponse, setPatchResponse] = useState<string>();
-  const [patchError, setPatchError] = useState<Error | null>(null);
   const [patchStatus, setPatchStatus] = useState<Status>("");
 
   const patchTask = async (task: NewTaskType, taskId: string) => {
@@ -14,24 +14,30 @@ const usePatchTask = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           taskId: taskId,
-          createdTask: task,
+          ...task,
         }),
       };
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_DEV}/api/tasks`,
+        `${process.env.NEXT_PUBLIC_URL_DEV}/api/task`,
         requestOptions,
       );
       const data = await response.json();
-      setPatchResponse(JSON.stringify(data));
-      setPatchStatus("success");
+      const parsedResult = MessageSchema.parse(data);
+      if (parsedResult.message) {
+        setPatchResponse(parsedResult.message);
+        setPatchStatus("success");
+      } else {
+        setPatchResponse(parsedResult.error);
+        setPatchStatus("error");
+      }
     } catch (error) {
       if (error instanceof Error) {
-        setPatchError(error);
+        setPatchResponse(JSON.stringify(error.message));
       }
       setPatchStatus("error");
     }
   };
-  return { patchResponse, patchError, patchStatus, patchTask };
+  return { patchResponse, patchStatus, patchTask };
 };
 
 export default usePatchTask;

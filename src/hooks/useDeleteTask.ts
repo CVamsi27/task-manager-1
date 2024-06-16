@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Status } from "@/types";
+import { MessageSchema } from "@/schema";
+import useGetAllTasks from "./useGetAllTasks";
 
 const useDeleteTask = () => {
   const [deleteStatus, setDeleteStatus] = useState<Status>("");
-  const [deleteError, setDeleteError] = useState<Error | null>(null);
+  const [deleteError, setDeleteError] = useState<string | undefined>("");
+  const { refresh } = useGetAllTasks();
 
   const deleteTask = async (taskId: string) => {
     setDeleteStatus("loading");
@@ -17,12 +20,23 @@ const useDeleteTask = () => {
       if (!response.ok) {
         throw new Error("Failed to delete task");
       }
-      setDeleteStatus("success");
+
+      const data = await response.json();
+      const parsedResult = MessageSchema.parse(data);
+      if (parsedResult.message) {
+        setDeleteError(parsedResult.message);
+        setDeleteStatus("success");
+      } else {
+        setDeleteError(parsedResult.error);
+        setDeleteStatus("error");
+      }
     } catch (error) {
       if (error instanceof Error) {
-        setDeleteError(error);
+        setDeleteError(JSON.stringify(error.message));
       }
       setDeleteStatus("error");
+    } finally {
+      refresh();
     }
   };
 

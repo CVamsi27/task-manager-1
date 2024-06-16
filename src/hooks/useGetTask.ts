@@ -1,4 +1,6 @@
+import { GetTaskResponseSchema } from "@/schema";
 import { Status, TaskType } from "@/types";
+import { isResponseError } from "@/utils";
 import { useEffect, useState } from "react";
 
 const useGetTask = (taskId: string) => {
@@ -8,8 +10,8 @@ const useGetTask = (taskId: string) => {
     taskDescription: "",
     taskStatus: "To Do",
   });
-  const [getTaskError, setGetTaskError] = useState<Error | null>(null);
-  const [getTaskstatus, setGetTaskStatus] = useState<Status>("");
+  const [getTaskError, setGetTaskError] = useState<string | undefined>("");
+  const [getTaskStatus, setGetTaskStatus] = useState<Status>("");
 
   useEffect(() => {
     const getTask = async () => {
@@ -22,11 +24,17 @@ const useGetTask = (taskId: string) => {
           throw new Error("Failed to fetch Data");
         }
         const data = await response.json();
-        setTask(data);
-        setGetTaskStatus("success");
+        const parsedResult = GetTaskResponseSchema.parse(data);
+        if (isResponseError(parsedResult)) {
+          setGetTaskError(parsedResult.error);
+          setGetTaskStatus("error");
+        } else {
+          setTask(parsedResult);
+          setGetTaskStatus("success");
+        }
       } catch (error) {
         if (error instanceof Error) {
-          setGetTaskError(error);
+          setGetTaskError(JSON.stringify(error.message));
         }
         setGetTaskStatus("error");
       }
@@ -34,7 +42,7 @@ const useGetTask = (taskId: string) => {
     getTask();
   }, [taskId]);
 
-  return { task, getTaskstatus, getTaskError };
+  return { task, getTaskStatus, getTaskError };
 };
 
 export default useGetTask;

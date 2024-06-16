@@ -1,10 +1,15 @@
-import { TaskSchema, NewTaskSchema } from "@/schema";
+import { TaskSchema, NewTaskSchema, TaskFilterSchema } from "@/schema";
 import { Dispatch, SetStateAction } from "react";
 import { z } from "zod";
 
 export type TaskType = z.infer<typeof TaskSchema>;
 
 export type NewTaskType = z.infer<typeof NewTaskSchema>;
+
+export type ZodErrorDisplay = {
+  for: string | number;
+  message: string;
+};
 
 export type Status = "loading" | "error" | "success" | "";
 
@@ -25,7 +30,7 @@ export type BasicButtonProps = React.HTMLAttributes<HTMLSpanElement> & {
 export interface GetTaskType {
   tasks?: TaskType[];
   status?: Status;
-  error?: Error | null;
+  error?: string;
   getFiltertasks?: (statusFilter: TaskFilterTypes) => void;
   getTasks?: () => Promise<void>;
   taskStatus?: TaskFilterTypes;
@@ -34,14 +39,12 @@ export interface GetTaskType {
 
 export interface PostTaskType {
   postResponse?: string;
-  postError?: Error | null;
   postStatus?: Status;
   postTask: (task: TaskType) => Promise<void>;
 }
 
 export interface PatchTaskType {
   patchResponse?: string;
-  patchError?: Error | null;
   patchStatus?: Status;
   patchTask: (task: NewTaskType, taskId: string) => Promise<void>;
 }
@@ -53,13 +56,13 @@ export interface FilterVariants {
   Done: "primary" | "basic" | "error";
 }
 
-export type TaskFilterTypes = "All" | "To Do" | "In Progress" | "Done";
+export type TaskFilterTypes = z.infer<typeof TaskFilterSchema>;
 
 export interface ListOfTaskProps {
   tasks: TaskType[] | undefined;
   status: Status;
-  error: Error | null | undefined;
+  error: string | undefined;
   deleteStatus: Status;
-  deleteError: Error | null;
+  deleteError: string | undefined;
   deleteTask: (taskId: string) => Promise<void>;
 }

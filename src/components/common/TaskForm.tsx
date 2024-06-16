@@ -1,7 +1,12 @@
 "use client";
 import Link from "next/link";
 import { FormEvent, useEffect, useState } from "react";
-import { NewTaskType, PatchTaskType, PostTaskType } from "@/types";
+import {
+  NewTaskType,
+  PatchTaskType,
+  PostTaskType,
+  ZodErrorDisplay,
+} from "@/types";
 import usePostTask from "@/hooks/usePostTask";
 import { TaskStatusList } from "@/utils";
 import { useRouter } from "next/navigation";
@@ -10,50 +15,55 @@ import usePatchTask from "@/hooks/usePatchTask";
 import useGetTask from "@/hooks/useGetTask";
 import BasicText from "../ui/BasicText";
 import InputTitle from "../ui/InputTitle";
+import { NewTaskSchema } from "@/schema";
 
 export default function TaskForm({ taskId }: { taskId?: string }) {
-  const { postResponse, postError, postStatus, postTask }: PostTaskType =
-    usePostTask();
-  const { patchResponse, patchError, patchStatus, patchTask }: PatchTaskType =
+  const { postResponse, postStatus, postTask }: PostTaskType = usePostTask();
+  const { patchResponse, patchStatus, patchTask }: PatchTaskType =
     usePatchTask();
   const [currentTask, setCurrentTask] = useState<NewTaskType>({
     taskTitle: "",
     taskDescription: "",
     taskStatus: "To Do",
   });
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const { task, getTaskstatus, getTaskError } =
+  const [backendErrorMessage, setBackendErrorMessage] = useState<string>("");
+  const [errors, setErrors] = useState<ZodErrorDisplay[] | undefined>();
+
+  const { task, getTaskStatus, getTaskError } =
     taskId !== undefined
       ? useGetTask(taskId)
       : {
           task: currentTask,
-          getTaskstatus: "",
+          getTaskStatus: "",
           getTaskError: null,
         };
   const router = useRouter();
 
   useEffect(() => {
-    if (task) setCurrentTask(task);
+    if (taskId && Object.keys(task).length !== 0) setCurrentTask(task);
   }, [task, taskId]);
 
   useEffect(() => {
     if (postStatus === "success" || patchStatus === "success") router.push("/");
-    if (postStatus === "error" || patchStatus === "error")
-      setErrorMessage(
+    if ((postStatus === "error" && taskId) || patchStatus === "error")
+      setBackendErrorMessage(
         `Something went wrong! ${JSON.stringify(postResponse || patchResponse)}`,
       );
   }, [postStatus, patchStatus]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (currentTask?.taskTitle === undefined)
-      setErrorMessage("Title is empty!");
-    else if (currentTask?.taskDescription === undefined)
-      setErrorMessage("Description is empty!");
-    else if (currentTask?.taskStatus === undefined)
-      setErrorMessage("Status is empty!");
-    else if (currentTask === undefined)
-      setErrorMessage("Few Fields are empty!");
+    const parseResult = NewTaskSchema.safeParse(currentTask);
+
+    if (!parseResult.success) {
+      let errArr: ZodErrorDisplay[] = [];
+      const { errors: err } = parseResult.error;
+      for (var i = 0; i < err.length; i++) {
+        errArr.push({ for: err[i].path[0], message: err[i].message });
+      }
+      setErrors(errArr);
+      return;
+    }
 
     if (taskId === undefined) await postTask(currentTask);
     else await patchTask(currentTask, taskId);
@@ -65,31 +75,36 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
       method="post"
       onSubmit={handleSubmit}
     >
-      {getTaskstatus === "loading" && (
+      {getTaskStatus === "loading" && (
         <BasicText className="p-4" text="Loading ..." />
       )}
-      {getTaskstatus === "error" && (
+      {getTaskStatus === "error" && (
         <BasicText
           text={`Running into an error: ${getTaskError}`}
           variant="error"
         />
       )}
-      {(getTaskstatus === "success" || getTaskstatus === "") && (
+      {(getTaskStatus === "success" || getTaskStatus === "") && (
         <>
           <div className="flex flex-col mx-6 mt-6 px-6 gap-1 w-full">
-            <InputTitle title="Title" />
+            <div>
+              <InputTitle title="Title" />
+              <span className="text-red-500"> *</span>
+            </div>
             <input
               className="bg-background border-border border-2 rounded-xl px-3 py-2 text-foreground"
               onChange={(e) =>
                 setCurrentTask({ ...currentTask, taskTitle: e.target.value })
               }
               placeholder="Write your task title"
-              required={true}
               type="text"
               value={currentTask?.taskTitle}
             />
+            <div className="mt-1 text-xs text-red-500">
+              {errors &&
+                errors.find((error) => error.for === "taskTitle")?.message}
+            </div>
           </div>
-
           <div className="flex flex-col mx-6 px-6 gap-1 w-full">
             <InputTitle title="Description" />
             <textarea
@@ -103,10 +118,18 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
               placeholder="Write your task description"
               value={currentTask?.taskDescription}
             />
+            <div className="mt-1 text-xs text-red-500">
+              {errors &&
+                errors.find((error) => error.for === "taskDescription")
+                  ?.message}
+            </div>
           </div>
           <div className="flex flex-col mx-6 px-6 w-full gap-1">
-            <InputTitle title="Status" />
-            <div className="flex justify-start gap-5 items-center ml-1 mb-1">
+            <div>
+              <InputTitle title="Status" />
+              <span className="text-red-500"> *</span>
+            </div>
+            <div className="flex justify-between items-center mx-2 my-1">
               {TaskStatusList.map((status) => (
                 <div key={status}>
                   <input
@@ -132,20 +155,22 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
                 </div>
               ))}
             </div>
+            <div className="mt-1 text-xs text-red-500">
+              {errors &&
+                errors.find((error) => error.for === "taskStatus")?.message}
+            </div>
           </div>
-
-          {errorMessage !== "" ||
-          postError ||
-          patchError ||
+          {backendErrorMessage !== "" ||
           postStatus === "error" ||
           patchStatus === "error" ? (
-            <span className="text-destructive font-semibold text-lg">
-              {errorMessage}
-            </span>
+            <div className="flex justify-center items-center mx-4">
+              <span className="text-destructive font-semibold text-lg">
+                {backendErrorMessage}
+              </span>
+            </div>
           ) : (
             <></>
           )}
-
           <div className="flex mx-6 px-6 mb-4 gap-28 justify-between w-full">
             <Link
               href="/"

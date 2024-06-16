@@ -16,7 +16,7 @@ export default function BasicText({
   );
 }
 
-const basicTextVariants = cva("font-bold text-xl", {
+const basicTextVariants = cva("font-bold text-xl p-2", {
   variants: {
     variant: {
       basic: "text-foreground",

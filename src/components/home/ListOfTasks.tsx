@@ -12,18 +12,25 @@ export default function ListOfTasks({
   deleteError,
   deleteTask,
 }: ListOfTaskProps) {
-  if (status === "loading" || status === "" || deleteStatus === "loading")
+  if (status === "loading" || deleteStatus === "loading") {
     return <BasicText text="Loading ..." />;
-  if (status === "error" || deleteStatus === "error")
+  }
+  if (status === "error" || deleteStatus === "error") {
     return (
       <BasicText
         text={`Running into an error: ${error || deleteError}`}
         variant="error"
       />
     );
-  if (!tasks || tasks.length === 0)
-    return <BasicText text="You have no tasks created yet!" />;
-  if (deleteStatus === "success" || deleteStatus === "")
+  }
+  if (!tasks || tasks.length === 0) {
+    if (status === "success") {
+      return <BasicText text="You have no tasks created yet!" />;
+    } else {
+      return <BasicText text="Loading ..." />;
+    }
+  }
+  if (deleteStatus === "success" || status === "success")
     return tasks.map((task, index) => (
       <div key={task.taskId}>
         <div>

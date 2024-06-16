@@ -1,9 +1,9 @@
+import { MessageSchema } from "@/schema";
 import { NewTaskType, Status } from "@/types";
 import { useState } from "react";
 
 const usePostTask = () => {
   const [postResponse, setPostResponse] = useState<string>();
-  const [postError, setPostError] = useState<Error | null>(null);
   const [postStatus, setPostStatus] = useState<Status>("");
 
   const postTask = async (task: NewTaskType) => {
@@ -15,20 +15,26 @@ const usePostTask = () => {
         body: JSON.stringify(task),
       };
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_DEV}/api/tasks`,
+        `${process.env.NEXT_PUBLIC_URL_DEV}/api/task`,
         requestOptions,
       );
       const data = await response.json();
-      setPostResponse(JSON.stringify(data));
-      setPostStatus("success");
+      const parsedResult = MessageSchema.parse(data);
+      if (parsedResult.message) {
+        setPostResponse(parsedResult.message);
+        setPostStatus("success");
+      } else {
+        setPostResponse(parsedResult.error);
+        setPostStatus("error");
+      }
     } catch (error) {
       if (error instanceof Error) {
-        setPostError(error);
+        setPostResponse(JSON.stringify(error.message));
       }
       setPostStatus("error");
     }
   };
-  return { postResponse, postError, postStatus, postTask };
+  return { postResponse, postStatus, postTask };
 };
 
 export default usePostTask;
