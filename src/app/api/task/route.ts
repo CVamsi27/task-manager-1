@@ -1,10 +1,10 @@
 import { prisma } from "@/db";
 import { NewTaskSchema, TaskSchema } from "@/schema";
 import { handleError } from "@/utils/errorHandler";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-export async function GET(request: NextResponse) {
+export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.searchParams);
@@ -29,7 +29,7 @@ export async function GET(request: NextResponse) {
   }
 }
 
-export async function POST(request: NextResponse) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const parseResult = NewTaskSchema.parse(body);
@@ -42,7 +42,7 @@ export async function POST(request: NextResponse) {
   }
 }
 
-export async function PATCH(request: NextResponse) {
+export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
     const { taskId, ...parseResult } = TaskSchema.parse(body);
@@ -58,7 +58,7 @@ export async function PATCH(request: NextResponse) {
   }
 }
 
-export async function DELETE(request: NextResponse) {
+export async function DELETE(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.searchParams);

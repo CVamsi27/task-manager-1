@@ -1,5 +1,7 @@
 ## Getting Started
 
+Visit to view deployed site - [http://localhost:3000](http://localhost:3000)
+
 ## Set Up .env file
 
 Add all env variables available in .env.local, like:
@@ -8,7 +10,7 @@ DATABASE_URL=
 ```
 Add Postgres database URL to run the application
 
-## Run the application
+## Run the application Locally
 
 First, run the development server:
 

@@ -1,9 +1,9 @@
 import { prisma } from "@/db";
 import { TaskFilterSchema } from "@/schema";
 import { handleError } from "@/utils/errorHandler";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextResponse) {
+export async function GET(request: NextRequest) {
   try {
     const url = new URL(request.url);
     const searchParams = new URLSearchParams(url.searchParams);
