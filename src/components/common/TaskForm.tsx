@@ -131,27 +131,30 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
             </div>
             <div className="flex justify-between items-center mx-2 my-1">
               {TaskStatusList.map((status) => (
-                <div key={status}>
-                  <input
-                    type="radio"
-                    id={status}
-                    value={status}
-                    checked={currentTask.taskStatus === status}
-                    name="Status"
-                    onChange={(e) => {
-                      if (
-                        e.target.value === "To Do" ||
-                        e.target.value === "In Progress" ||
-                        e.target.value === "Done"
-                      )
-                        setCurrentTask({
-                          ...currentTask,
-                          taskStatus: e.target.value,
-                        });
-                    }}
-                    required={true}
-                  />
-                  <InputTitle title={status} />
+                <div key={status} className="flex items-center justify-center">
+                  <label className="text-foreground flex items-center text-sm font-semibold" htmlFor={status}>
+                    <input
+                      className="mr-2"
+                      type="radio"
+                      id={status}
+                      value={status}
+                      checked={currentTask.taskStatus === status}
+                      name="Status"
+                      onChange={(e) => {
+                        if (
+                          e.target.value === "To Do" ||
+                          e.target.value === "In Progress" ||
+                          e.target.value === "Done"
+                        )
+                          setCurrentTask({
+                            ...currentTask,
+                            taskStatus: e.target.value,
+                          });
+                      }}
+                      required={true}
+                    />
+                    {status}
+                  </label>
                 </div>
               ))}
             </div>
