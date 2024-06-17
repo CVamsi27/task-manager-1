@@ -31,11 +31,11 @@ export default function ListOfTasks({
     }
   }
   if (deleteStatus === "success" || status === "success")
-    return tasks.map((task, index) => (
-      <div key={task.taskId}>
+    return tasks.map((task) => (
+      <div key={task.taskId} className="border-border border-2 rounded-xl p-4">
         <div>
-          <div className="grid grid-cols-2 items-center gap-40">
-            <div className="flex flex-col gap-1">
+          <div className="grid grid-cols-8 items-center gap-30">
+            <div className="flex flex-col gap-4 col-span-5">
               <span
                 className={`text-foreground text-2xl font-bold ${task.taskStatus === "Done" ? "line-through" : ""}`}
               >
@@ -48,11 +48,11 @@ export default function ListOfTasks({
               </span>
             </div>
 
-            <div className="grid grid-cols-2 items-center gap-6">
-              <span className="text-muted-foreground font-bold">
+            <div className="grid grid-cols-3 items-center gap-4 col-span-3">
+              <span className="text-muted-foreground font-bold col-span-2">
                 {task.taskStatus}
               </span>
-              <div className="flex gap-2 justify-end">
+              <div className="flex flex-col gap-2 justify-center items-center">
                 <Link
                   className="text-primary-foreground bg-primary p-1 rounded"
                   href={{
@@ -63,7 +63,7 @@ export default function ListOfTasks({
                   <Pencil />
                 </Link>
                 <button
-                  className="text-primary-foreground bg-primary p-1 rounded"
+                  className="text-destructive-foreground bg-destructive p-1 rounded"
                   onClick={() => {
                     deleteTask(task.taskId || "");
                   }}
@@ -74,11 +74,6 @@ export default function ListOfTasks({
             </div>
           </div>
         </div>
-        {tasks.length - 1 === index ? (
-          <></>
-        ) : (
-          <hr className="my-3 h-0.5 border-t-0 bg-border" />
-        )}
       </div>
     ));
 }

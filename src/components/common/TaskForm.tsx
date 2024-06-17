@@ -71,7 +71,7 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
 
   return (
     <form
-      className="bg-background border-border rounded-xl border-2 flex flex-col gap-4 mt-6 items-center"
+      className="bg-background border-border rounded-xl border-2 flex flex-col gap-4 mt-6 items-center mx-2 md:mx-0"
       method="post"
       onSubmit={handleSubmit}
     >

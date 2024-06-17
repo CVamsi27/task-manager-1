@@ -25,7 +25,7 @@ const Home = () => {
         </div>
         <FilterPane getFiltertasks={getFiltertasks} />
       </header>
-      <div className="flex flex-col border-border border-2 p-4 rounded-xl mb-10">
+      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-3 p-4 rounded-xl mx-2">
         <ListOfTasks
           tasks={tasks}
           status={status}
