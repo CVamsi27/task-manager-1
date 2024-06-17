@@ -132,7 +132,10 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
             <div className="flex justify-between items-center mx-2 my-1">
               {TaskStatusList.map((status) => (
                 <div key={status} className="flex items-center justify-center">
-                  <label className="text-foreground flex items-center text-sm font-semibold" htmlFor={status}>
+                  <label
+                    className="text-foreground flex items-center text-sm font-semibold"
+                    htmlFor={status}
+                  >
                     <input
                       className="mr-2"
                       type="radio"
