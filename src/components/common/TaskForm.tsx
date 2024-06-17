@@ -29,14 +29,7 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
   const [backendErrorMessage, setBackendErrorMessage] = useState<string>("");
   const [errors, setErrors] = useState<ZodErrorDisplay[] | undefined>();
 
-  const { task, getTaskStatus, getTaskError } =
-    taskId !== undefined
-      ? useGetTask(taskId)
-      : {
-          task: currentTask,
-          getTaskStatus: "",
-          getTaskError: null,
-        };
+  const { task, getTaskStatus, getTaskError } = useGetTask(taskId ?? "");
   const router = useRouter();
 
   useEffect(() => {
@@ -49,7 +42,7 @@ export default function TaskForm({ taskId }: { taskId?: string }) {
       setBackendErrorMessage(
         `Something went wrong! ${JSON.stringify(postResponse || patchResponse)}`,
       );
-  }, [postStatus, patchStatus]);
+  }, [postStatus, patchStatus, postResponse, patchResponse, taskId, router]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

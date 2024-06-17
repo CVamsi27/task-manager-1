@@ -14,8 +14,8 @@ const useGetAllTasks = () => {
     try {
       const url =
         status === "All"
-          ? `${process.env.NEXT_PUBLIC_URL_DEV}/api/tasks`
-          : `${process.env.NEXT_PUBLIC_URL_DEV}/api/tasks?status=${status}`;
+          ? `/api/tasks`
+          : `/api/tasks?status=${status}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch Data");

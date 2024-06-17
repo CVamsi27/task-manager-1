@@ -15,7 +15,7 @@ const usePostTask = () => {
         body: JSON.stringify(task),
       };
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_DEV}/api/task`,
+        `/api/task`,
         requestOptions,
       );
       const data = await response.json();

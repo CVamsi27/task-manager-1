@@ -12,7 +12,7 @@ const useDeleteTask = () => {
     setDeleteStatus("loading");
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_DEV}/api/task?taskId=${taskId}`,
+        `/api/task?taskId=${taskId}`,
         {
           method: "DELETE",
         },

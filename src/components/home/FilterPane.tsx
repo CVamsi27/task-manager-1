@@ -42,7 +42,7 @@ export default function FilterPane({
         <BasicButton
           key={filter}
           variant={variants[filter as keyof FilterVariants]}
-          text={getNewFilter(filter)}
+          text={getNewFilter(filter) ?? ""}
           onClick={() => {
             handleFilterClick(filter as keyof FilterVariants);
             getFiltertasks(getNewFilter(filter));

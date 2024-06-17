@@ -15,10 +15,14 @@ const useGetTask = (taskId: string) => {
 
   useEffect(() => {
     const getTask = async () => {
+      if (taskId === "") {
+        setGetTaskStatus("success");
+        return;
+      }
       setGetTaskStatus("loading");
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_URL_DEV}/api/task?taskId=${taskId}`,
+          `/api/task?taskId=${taskId}`,
         );
         if (!response.ok) {
           throw new Error("Failed to fetch Data");

@@ -18,7 +18,7 @@ const usePatchTask = () => {
         }),
       };
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_URL_DEV}/api/task`,
+        `/api/task`,
         requestOptions,
       );
       const data = await response.json();
