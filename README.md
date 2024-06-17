@@ -1,6 +1,6 @@
 ## Getting Started
 
-Visit to view deployed site - [http://localhost:3000](http://localhost:3000)
+Visit to view deployed site - [https://task-manager-rosy-eight.vercel.app/](https://task-manager-rosy-eight.vercel.app/)
 
 ## Set Up .env file
 
