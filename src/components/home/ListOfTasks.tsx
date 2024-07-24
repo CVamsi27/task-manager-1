@@ -14,7 +14,6 @@ export default function ListOfTasks({
   deleteTask,
   refresh,
 }: ListOfTaskProps) {
-
   const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -24,8 +23,6 @@ export default function ListOfTasks({
       setIsDeleteLoading(false);
     }
   }, [deleteStatus]);
-
-  console.log(status, deleteStatus, isDeleteLoading)
 
   if (status === "loading" || deleteStatus === "loading" || isDeleteLoading) {
     return <BasicText text="Loading ..." />;

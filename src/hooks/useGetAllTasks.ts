@@ -1,15 +1,13 @@
 import { GetTasksResponseSchema } from "@/schema";
 import { Status, TaskFilterTypes, TaskType } from "@/types";
 import { isResponseError } from "@/utils";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 const useGetAllTasks = () => {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [status, setStatus] = useState<Status>("");
   const [error, setError] = useState<string | undefined>(undefined);
   const [taskStatus, setTaskStatus] = useState<TaskFilterTypes>("All");
-
-  const initialRender = useRef(true);
 
   const getFiltertasks = useCallback(async (status: TaskFilterTypes) => {
     setStatus("loading");
@@ -38,10 +36,6 @@ const useGetAllTasks = () => {
   }, []);
 
   useEffect(() => {
-    if (initialRender.current) {
-      initialRender.current = false;
-      return;
-    }
     getFiltertasks(taskStatus);
   }, [taskStatus, getFiltertasks]);
 
