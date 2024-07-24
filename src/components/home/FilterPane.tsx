@@ -1,12 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { FilterVariants, TaskFilterTypes } from "@/types";
 import BasicButton from "../ui/BasicButton";
 
 export default function FilterPane({
-  getFiltertasks,
+  setTaskStatus,
 }: {
-  getFiltertasks: (statusFilter: TaskFilterTypes) => void;
+  setTaskStatus: (statusFilter: TaskFilterTypes) => void;
 }) {
   const [variants, setVariants] = useState<FilterVariants>({
     All: "primary",
@@ -15,7 +15,7 @@ export default function FilterPane({
     Done: "basic",
   });
 
-  const handleFilterClick = (filter: keyof FilterVariants) => {
+  const handleFilterClick = useCallback((filter: keyof FilterVariants) => {
     const updatedVariants: FilterVariants = {
       All: "basic",
       To_Do: "basic",
@@ -24,17 +24,18 @@ export default function FilterPane({
       [filter]: "primary",
     };
     setVariants(updatedVariants);
-  };
+    setTaskStatus(getNewFilter(filter));
+  }, [setTaskStatus]);
 
-  const getNewFilter = (filter: string): TaskFilterTypes => {
+  const getNewFilter = useCallback((filter: string): TaskFilterTypes => {
     const data =
       filter === "To_Do"
         ? "To Do"
         : filter === "In_Progress"
-          ? "In Progress"
-          : filter;
+        ? "In Progress"
+        : filter;
     return data as TaskFilterTypes;
-  };
+  }, []);
 
   return (
     <div className="flex flex-row gap-3 m-2">
@@ -43,10 +44,7 @@ export default function FilterPane({
           key={filter}
           variant={variants[filter as keyof FilterVariants]}
           text={getNewFilter(filter) ?? ""}
-          onClick={() => {
-            handleFilterClick(filter as keyof FilterVariants);
-            getFiltertasks(getNewFilter(filter));
-          }}
+          onClick={() => handleFilterClick(filter as keyof FilterVariants)}
         />
       ))}
     </div>

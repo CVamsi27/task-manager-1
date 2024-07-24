@@ -13,16 +13,23 @@ export async function GET(request: NextRequest) {
         where: {
           taskStatus: status || "",
         },
-        orderBy: {
+        orderBy: [
+        {
           taskStatus: "desc",
         },
+        {
+          taskTitle: "asc"
+        }],
       });
       return NextResponse.json(task);
     } else {
       const ListOfTasks = await prisma.task.findMany({
-        orderBy: {
+        orderBy: [{
           taskStatus: "desc",
         },
+        {
+          taskTitle: "asc"
+        }]
       });
       return NextResponse.json(ListOfTasks);
     }

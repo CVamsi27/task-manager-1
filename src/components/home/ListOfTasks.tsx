@@ -3,6 +3,7 @@ import { ListOfTaskProps } from "@/types";
 import { Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import BasicText from "../ui/BasicText";
+import { useEffect } from "react";
 
 export default function ListOfTasks({
   tasks,
@@ -11,7 +12,15 @@ export default function ListOfTasks({
   deleteStatus,
   deleteError,
   deleteTask,
+  refresh
 }: ListOfTaskProps) {
+
+  useEffect(() => {
+    if(deleteStatus === "success") {
+      refresh();
+    }
+  }, [deleteStatus])
+
   if (status === "loading" || deleteStatus === "loading") {
     return <BasicText text="Loading ..." />;
   }
@@ -30,50 +39,61 @@ export default function ListOfTasks({
       return <BasicText text="Loading ..." />;
     }
   }
-  if (deleteStatus === "success" || status === "success")
-    return tasks.map((task) => (
-      <div key={task.taskId} className="border-border border-2 rounded-xl p-4">
-        <div>
-          <div className="grid grid-cols-8 items-center gap-30">
-            <div className="flex flex-col gap-4 col-span-5">
-              <span
-                className={`text-foreground text-2xl font-bold ${task.taskStatus === "Done" ? "line-through" : ""}`}
-              >
-                {task.taskTitle}
-              </span>
-              <span
-                className={`text-muted-foreground text-sm italic ${task.taskStatus === "Done" ? "line-through" : ""}`}
-              >
-                {task.taskDescription}
-              </span>
-            </div>
 
-            <div className="grid grid-cols-3 items-center gap-4 col-span-3">
-              <span className="text-muted-foreground font-bold col-span-2">
-                {task.taskStatus}
-              </span>
-              <div className="flex flex-col gap-2 justify-center items-center">
-                <Link
-                  className="text-primary-foreground bg-primary p-1 rounded"
-                  href={{
-                    pathname: "/edit",
-                    query: { taskId: task.taskId },
-                  }}
+  return (
+    <>
+      {tasks.map((task) => (
+        <div
+          key={task.taskId}
+          className="border-border border-2 rounded-xl p-4"
+        >
+          <div>
+            <div className="grid grid-cols-8 items-center gap-30">
+              <div className="flex flex-col gap-4 col-span-5">
+                <span
+                  className={`text-foreground text-2xl font-bold ${
+                    task.taskStatus === "Done" ? "line-through" : ""
+                  }`}
                 >
-                  <Pencil />
-                </Link>
-                <button
-                  className="text-destructive-foreground bg-destructive p-1 rounded"
-                  onClick={() => {
-                    deleteTask(task.taskId || "");
-                  }}
+                  {task.taskTitle}
+                </span>
+                <span
+                  className={`text-muted-foreground text-sm italic ${
+                    task.taskStatus === "Done" ? "line-through" : ""
+                  }`}
                 >
-                  <Trash />
-                </button>
+                  {task.taskDescription}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-3 items-center gap-4 col-span-3">
+                <span className="text-muted-foreground font-bold col-span-2">
+                  {task.taskStatus}
+                </span>
+                <div className="flex flex-col gap-2 justify-center items-center">
+                  <Link
+                    className="text-primary-foreground bg-primary p-1 rounded"
+                    href={{
+                      pathname: "/edit",
+                      query: { taskId: task.taskId },
+                    }}
+                  >
+                    <Pencil />
+                  </Link>
+                  <button
+                    className="text-destructive-foreground bg-destructive p-1 rounded"
+                    onClick={() => {
+                      deleteTask(task.taskId || "");
+                    }}
+                  >
+                    <Trash />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    ));
+      ))}
+    </>
+  );
 }

@@ -5,8 +5,8 @@ import useGetAllTasks from "./useGetAllTasks";
 
 const useDeleteTask = () => {
   const [deleteStatus, setDeleteStatus] = useState<Status>("");
-  const [deleteError, setDeleteError] = useState<string | undefined>("");
-  const { refresh } = useGetAllTasks();
+  const [deleteError, setDeleteError] = useState<string | undefined>(undefined);
+  const { setTasks } = useGetAllTasks();
 
   const deleteTask = async (taskId: string) => {
     setDeleteStatus("loading");
@@ -24,7 +24,7 @@ const useDeleteTask = () => {
       const data = await response.json();
       const parsedResult = MessageSchema.parse(data);
       if (parsedResult.message) {
-        setDeleteError(parsedResult.message);
+        setTasks((prevTasks) => prevTasks.filter(task => task.taskId !== taskId));
         setDeleteStatus("success");
       } else {
         setDeleteError(parsedResult.error);
@@ -32,11 +32,9 @@ const useDeleteTask = () => {
       }
     } catch (error) {
       if (error instanceof Error) {
-        setDeleteError(JSON.stringify(error.message));
+        setDeleteError(error.message);
       }
       setDeleteStatus("error");
-    } finally {
-      refresh();
     }
   };
 

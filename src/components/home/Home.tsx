@@ -5,10 +5,10 @@ import ListOfTasks from "./ListOfTasks";
 import { GetTaskType } from "@/types";
 import useGetAllTasks from "@/hooks/useGetAllTasks";
 import useDeleteTask from "@/hooks/useDeleteTask";
+import { useEffect } from "react";
 
 const Home = () => {
-  const { tasks, status, error, getFiltertasks }: GetTaskType =
-    useGetAllTasks();
+  const { tasks, status, error, setTaskStatus, refresh }: GetTaskType = useGetAllTasks();
   const { deleteStatus, deleteError, deleteTask } = useDeleteTask();
 
   return (
@@ -23,7 +23,7 @@ const Home = () => {
             + Add Task
           </Link>
         </div>
-        <FilterPane getFiltertasks={getFiltertasks} />
+        <FilterPane setTaskStatus={setTaskStatus} />
       </header>
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-3 p-4 rounded-xl mx-2">
         <ListOfTasks
@@ -33,6 +33,7 @@ const Home = () => {
           deleteStatus={deleteStatus}
           deleteError={deleteError}
           deleteTask={deleteTask}
+          refresh={refresh}
         />
       </div>
     </div>

@@ -70,7 +70,6 @@ export async function DELETE(request: NextRequest) {
     });
     return NextResponse.json({ message: "Task Deleted Successfully!" });
   } catch (error) {
-    console.log(error);
     return handleError(error);
   }
 }

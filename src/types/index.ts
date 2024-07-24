@@ -35,6 +35,7 @@ export interface GetTaskType {
   getTasks?: () => Promise<void>;
   taskStatus?: TaskFilterTypes;
   setTaskStatus?: Dispatch<SetStateAction<TaskFilterTypes>>;
+  refresh: () => void;
 }
 
 export interface PostTaskType {
@@ -65,4 +66,5 @@ export interface ListOfTaskProps {
   deleteStatus: Status;
   deleteError: string | undefined;
   deleteTask: (taskId: string) => Promise<void>;
+  refresh: () => void;
 }
