@@ -5,7 +5,6 @@ import ListOfTasks from "./ListOfTasks";
 import { GetTaskType } from "@/types";
 import useGetAllTasks from "@/hooks/useGetAllTasks";
 import useDeleteTask from "@/hooks/useDeleteTask";
-import { useEffect } from "react";
 
 const Home = () => {
   const { tasks, status, error, setTaskStatus, refresh }: GetTaskType =

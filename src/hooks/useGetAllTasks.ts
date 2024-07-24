@@ -49,10 +49,6 @@ const useGetAllTasks = () => {
     getFiltertasks(taskStatus);
   }, [getFiltertasks, taskStatus]);
 
-  useEffect(() => {
-    console.log(tasks);
-  }, [tasks]);
-
   return {
     tasks,
     status,

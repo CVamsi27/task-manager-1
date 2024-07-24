@@ -4,7 +4,6 @@ import { Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import BasicText from "../ui/BasicText";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
 
 export default function ListOfTasks({
   tasks,
@@ -25,6 +24,8 @@ export default function ListOfTasks({
       setIsDeleteLoading(false);
     }
   }, [deleteStatus]);
+
+  console.log(status, deleteStatus, isDeleteLoading)
 
   if (status === "loading" || deleteStatus === "loading" || isDeleteLoading) {
     return <BasicText text="Loading ..." />;
