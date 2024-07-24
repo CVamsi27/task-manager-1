@@ -3,7 +3,8 @@ import { ListOfTaskProps } from "@/types";
 import { Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import BasicText from "../ui/BasicText";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function ListOfTasks({
   tasks,
@@ -14,13 +15,18 @@ export default function ListOfTasks({
   deleteTask,
   refresh,
 }: ListOfTaskProps) {
+
+  const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (deleteStatus === "success") {
+      setIsDeleteLoading(true);
       refresh();
+      setIsDeleteLoading(false);
     }
   }, [deleteStatus]);
 
-  if (status === "loading" || deleteStatus === "loading") {
+  if (status === "loading" || deleteStatus === "loading" || isDeleteLoading) {
     return <BasicText text="Loading ..." />;
   }
   if (status === "error" || deleteStatus === "error") {
