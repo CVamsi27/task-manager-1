@@ -5,9 +5,11 @@ Visit to view deployed site - [https://task-manager-rosy-eight.vercel.app/](http
 ## Set Up .env file
 
 Add all env variables available in .env.local, like:
+
 ```bash
 DATABASE_URL=
 ```
+
 Add Postgres database URL to run the application
 
 ## Run the application Locally

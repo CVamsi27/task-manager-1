@@ -12,14 +12,13 @@ export default function ListOfTasks({
   deleteStatus,
   deleteError,
   deleteTask,
-  refresh
+  refresh,
 }: ListOfTaskProps) {
-
   useEffect(() => {
-    if(deleteStatus === "success") {
+    if (deleteStatus === "success") {
       refresh();
     }
-  }, [deleteStatus])
+  }, [deleteStatus]);
 
   if (status === "loading" || deleteStatus === "loading") {
     return <BasicText text="Loading ..." />;

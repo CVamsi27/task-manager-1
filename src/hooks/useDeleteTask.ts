@@ -11,12 +11,9 @@ const useDeleteTask = () => {
   const deleteTask = async (taskId: string) => {
     setDeleteStatus("loading");
     try {
-      const response = await fetch(
-        `/api/task?taskId=${taskId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`/api/task?taskId=${taskId}`, {
+        method: "DELETE",
+      });
       if (!response.ok) {
         throw new Error("Failed to delete task");
       }
@@ -24,7 +21,9 @@ const useDeleteTask = () => {
       const data = await response.json();
       const parsedResult = MessageSchema.parse(data);
       if (parsedResult.message) {
-        setTasks((prevTasks) => prevTasks.filter(task => task.taskId !== taskId));
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => task.taskId !== taskId),
+        );
         setDeleteStatus("success");
       } else {
         setDeleteError(parsedResult.error);

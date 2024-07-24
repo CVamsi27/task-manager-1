@@ -15,25 +15,28 @@ export default function FilterPane({
     Done: "basic",
   });
 
-  const handleFilterClick = useCallback((filter: keyof FilterVariants) => {
-    const updatedVariants: FilterVariants = {
-      All: "basic",
-      To_Do: "basic",
-      In_Progress: "basic",
-      Done: "basic",
-      [filter]: "primary",
-    };
-    setVariants(updatedVariants);
-    setTaskStatus(getNewFilter(filter));
-  }, [setTaskStatus]);
+  const handleFilterClick = useCallback(
+    (filter: keyof FilterVariants) => {
+      const updatedVariants: FilterVariants = {
+        All: "basic",
+        To_Do: "basic",
+        In_Progress: "basic",
+        Done: "basic",
+        [filter]: "primary",
+      };
+      setVariants(updatedVariants);
+      setTaskStatus(getNewFilter(filter));
+    },
+    [setTaskStatus],
+  );
 
   const getNewFilter = useCallback((filter: string): TaskFilterTypes => {
     const data =
       filter === "To_Do"
         ? "To Do"
         : filter === "In_Progress"
-        ? "In Progress"
-        : filter;
+          ? "In Progress"
+          : filter;
     return data as TaskFilterTypes;
   }, []);
 

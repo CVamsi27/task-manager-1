@@ -14,22 +14,25 @@ export async function GET(request: NextRequest) {
           taskStatus: status || "",
         },
         orderBy: [
-        {
-          taskStatus: "desc",
-        },
-        {
-          taskTitle: "asc"
-        }],
+          {
+            taskStatus: "desc",
+          },
+          {
+            taskTitle: "asc",
+          },
+        ],
       });
       return NextResponse.json(task);
     } else {
       const ListOfTasks = await prisma.task.findMany({
-        orderBy: [{
-          taskStatus: "desc",
-        },
-        {
-          taskTitle: "asc"
-        }]
+        orderBy: [
+          {
+            taskStatus: "desc",
+          },
+          {
+            taskTitle: "asc",
+          },
+        ],
       });
       return NextResponse.json(ListOfTasks);
     }

@@ -8,7 +8,8 @@ import useDeleteTask from "@/hooks/useDeleteTask";
 import { useEffect } from "react";
 
 const Home = () => {
-  const { tasks, status, error, setTaskStatus, refresh }: GetTaskType = useGetAllTasks();
+  const { tasks, status, error, setTaskStatus, refresh }: GetTaskType =
+    useGetAllTasks();
   const { deleteStatus, deleteError, deleteTask } = useDeleteTask();
 
   return (

@@ -21,9 +21,7 @@ const useGetTask = (taskId: string) => {
       }
       setGetTaskStatus("loading");
       try {
-        const response = await fetch(
-          `/api/task?taskId=${taskId}`,
-        );
+        const response = await fetch(`/api/task?taskId=${taskId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch Data");
         }

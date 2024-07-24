@@ -14,7 +14,8 @@ const useGetAllTasks = () => {
   const getFiltertasks = useCallback(async (status: TaskFilterTypes) => {
     setStatus("loading");
     try {
-      const url = status === "All" ? `/api/tasks` : `/api/tasks?status=${status}`;
+      const url =
+        status === "All" ? `/api/tasks` : `/api/tasks?status=${status}`;
       const response = await fetch(url);
       if (!response.ok) {
         throw new Error("Failed to fetch data");
@@ -49,8 +50,8 @@ const useGetAllTasks = () => {
   }, [getFiltertasks, taskStatus]);
 
   useEffect(() => {
-    console.log(tasks)
-  }, [tasks])
+    console.log(tasks);
+  }, [tasks]);
 
   return {
     tasks,
@@ -59,7 +60,7 @@ const useGetAllTasks = () => {
     taskStatus,
     setTaskStatus,
     refresh,
-    setTasks
+    setTasks,
   };
 };
 

@@ -14,10 +14,7 @@ const usePostTask = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(task),
       };
-      const response = await fetch(
-        `/api/task`,
-        requestOptions,
-      );
+      const response = await fetch(`/api/task`, requestOptions);
       const data = await response.json();
       const parsedResult = MessageSchema.parse(data);
       if (parsedResult.message) {
