@@ -13,6 +13,8 @@ export const TaskSchema = z.object({
   taskStatus: TaskStatusSchema,
 });
 
+export const TaskSchemaArray = z.array(TaskSchema);
+
 export const NewTaskSchema = z.object({
   taskTitle: z.string().min(1),
   taskDescription: z.string(),

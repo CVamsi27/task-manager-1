@@ -22,7 +22,7 @@ export default function ListOfTasks({
       refresh();
       setIsDeleteLoading(false);
     }
-  }, [deleteStatus]);
+  }, [deleteStatus, refresh]);
 
   if (status === "loading" || deleteStatus === "loading" || isDeleteLoading) {
     return <BasicText text="Loading ..." />;

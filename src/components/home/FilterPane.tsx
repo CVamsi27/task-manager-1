@@ -15,6 +15,16 @@ export default function FilterPane({
     Done: "basic",
   });
 
+  const getNewFilter = useCallback((filter: string): TaskFilterTypes => {
+    const data =
+      filter === "To_Do"
+        ? "To Do"
+        : filter === "In_Progress"
+          ? "In Progress"
+          : filter;
+    return data as TaskFilterTypes;
+  }, []);
+
   const handleFilterClick = useCallback(
     (filter: keyof FilterVariants) => {
       const updatedVariants: FilterVariants = {
@@ -27,18 +37,8 @@ export default function FilterPane({
       setVariants(updatedVariants);
       setTaskStatus(getNewFilter(filter));
     },
-    [setTaskStatus],
+    [setTaskStatus, getNewFilter],
   );
-
-  const getNewFilter = useCallback((filter: string): TaskFilterTypes => {
-    const data =
-      filter === "To_Do"
-        ? "To Do"
-        : filter === "In_Progress"
-          ? "In Progress"
-          : filter;
-    return data as TaskFilterTypes;
-  }, []);
 
   return (
     <div className="flex flex-row gap-3 m-2">
